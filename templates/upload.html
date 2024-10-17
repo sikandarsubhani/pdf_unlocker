@@ -1,0 +1,63 @@
+{% extends "layout.html" %}
+
+{% block title %}Upload PDF{% endblock %}
+
+{% block content %}
+<div class="kenburns-bg"></div>
+<div class="upload-card">
+    
+    <form action="{{ url_for('upload_file') }}" method="post" enctype="multipart/form-data">
+        <div class="upload-area" id="drop-area">
+            <p class="upload-text">Click to browse or drag a PDF here</p>
+        </div>
+        <div class="file-name">
+            <span id="file-name-display">upload pdf</span>
+        </div>
+        <input type="file" id="file-input" name="file" accept=".pdf">
+        <button type="submit" class="upload-button">UPLOAD</button>
+    </form>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    const dropArea = document.getElementById('drop-area');
+    const fileInput = document.getElementById('file-input');
+    const fileNameDisplay = document.getElementById('file-name-display');
+
+    dropArea.addEventListener('click', () => fileInput.click());
+
+    fileInput.addEventListener('change', function() {
+        if (this.files[0]) {
+            if (this.files[0].type === 'application/pdf') {
+                fileNameDisplay.textContent = this.files[0].name;
+            } else {
+                alert('Please upload a PDF file');
+                this.value = '';
+            }
+        }
+    });
+
+    ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+        dropArea.addEventListener(eventName, preventDefaults, false);
+    });
+
+    function preventDefaults(e) {
+        e.preventDefault();
+        e.stopPropagation();
+    }
+
+    dropArea.addEventListener('drop', handleDrop, false);
+
+    function handleDrop(e) {
+        const dt = e.dataTransfer;
+        const files = dt.files;
+        fileInput.files = files;
+        if (files[0].type === 'application/pdf') {
+            fileNameDisplay.textContent = files[0].name;
+        } else {
+            alert('Please upload a PDF file');
+        }
+    }
+</script>
+{% endblock %}

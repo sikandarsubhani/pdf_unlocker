@@ -1,0 +1,13 @@
+{% extends "layout.html" %}
+
+{% block title %}View Unlocked PDF{% endblock %}
+
+{% block content %}
+<div class="upload-card" style="width: 80%; max-width: 800px;">
+    <h2>Unlocked PDF</h2>
+    <div class="pdf-container">
+        <iframe src="{{ url_for('static', filename='unlocked/' + filename) }}" width="100%" height="100%"></iframe>
+    </div>
+    <a href="{{ url_for('download_pdf', filename=filename) }}" class="upload-button download-button">Download Unlocked PDF</a>
+</div>
+{% endblock %}

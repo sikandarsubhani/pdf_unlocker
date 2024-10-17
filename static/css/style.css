@@ -1,0 +1,188 @@
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #121212;
+  color: #e0e0e0;
+}
+
+.navbar {
+  background-color: #1e1e1e;
+  padding: 10px 20px;
+}
+
+.navbar ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+}
+
+.navbar li {
+  margin-right: 20px;
+}
+
+.navbar a {
+  color: #e0e0e0;
+  text-decoration: none;
+}
+
+.content {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: calc(100vh - 50px);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Ken Burns effect for the background */
+.kenburns-bg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url('/static/css/bw.jpg'); /* Corrected path */
+  background-size: cover;
+  background-position: center;
+  z-index: 1;
+  -webkit-animation: kenburns-top 10s ease-out both; /* Increased duration */
+  animation: kenburns-top 10s ease-out both;
+}
+
+@-webkit-keyframes kenburns-top {
+  0% {
+    -webkit-transform: scale(1) translateY(0);
+    transform: scale(1) translateY(0);
+    -webkit-transform-origin: 50% 16%;
+    transform-origin: 50% 16%;
+  }
+  100% {
+    -webkit-transform: scale(1.25) translateY(-15px);
+    transform: scale(1.25) translateY(-15px);
+    -webkit-transform-origin: top;
+    transform-origin: top;
+  }
+}
+
+@keyframes kenburns-top {
+  0% {
+    -webkit-transform: scale(1) translateY(0);
+    transform: scale(1) translateY(0);
+    -webkit-transform-origin: 50% 16%;
+    transform-origin: 50% 16%;
+  }
+  100% {
+    -webkit-transform: scale(1.25) translateY(-15px);
+    transform: scale(1.25) translateY(-15px);
+    -webkit-transform-origin: top;
+    transform-origin: top;
+  }
+}
+
+.upload-card {
+  position: relative;
+  z-index: 2;
+  background-color: rgba(30, 30, 30, 0.85); /* Slight transparency */
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  width: 300px;
+  text-align: center;
+}
+
+.upload-area {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  border: 2px dashed #4a4a4a;
+  margin: 0 auto 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  transition: border-color 0.3s;
+  background-color: #2a2a2a;
+}
+
+.upload-area:hover {
+  border-color: #6a6a6a;
+}
+
+.upload-text {
+  font-size: 14px;
+  color: #b0b0b0;
+  max-width: 120px;
+}
+
+.file-name {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 20px;
+  color: #b0b0b0;
+}
+
+.upload-button {
+  background-color: #bb86fc;
+  color: #121212;
+  border: none;
+  border-radius: 4px;
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.upload-button:hover {
+  background-color: #a66ef7;
+}
+
+#file-input {
+  display: none;
+}
+
+.flash-messages {
+  position: fixed;
+  top: 60px;
+  right: 20px;
+  z-index: 1000;
+}
+
+.flash-message {
+  padding: 10px 20px;
+  margin-bottom: 10px;
+  border-radius: 4px;
+  color: #ffffff;
+}
+
+.flash-message.success {
+  background-color: #4caf50;
+}
+
+.flash-message.error {
+  background-color: #f44336;
+}
+
+.password-input {
+  width: 90%;
+  padding: 10px;
+  margin-bottom: 20px;
+  border: 1px solid #4a4a4a;
+  border-radius: 4px;
+  background-color: #2a2a2a;
+  color: #e0e0e0;
+}
+
+.pdf-container {
+  width: 100%;
+  height: calc(100vh - 150px);
+  margin-top: 20px;
+}
+
+.download-button {
+  display: inline-block;
+  margin-top: 20px;
+  text-decoration: none;
+}
