@@ -7,7 +7,7 @@ app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = 'uploads'
 app.config['UNLOCKED_FOLDER'] = os.path.join('static', 'unlocked')
 app.config['ALLOWED_EXTENSIONS'] = {'pdf'}
-app.secret_key = '70113185'  # Change this to a random secret key
+app.secret_key = '70113185' 
 
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in app.config['ALLOWED_EXTENSIONS']
@@ -26,7 +26,29 @@ def upload_file():
             filename = secure_filename(file.filename)
             file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
             file.save(file_path)
-            return redirect(url_for('enter_password', filename=filename))
+
+            # Check if the PDF is encrypted
+            try:
+                reader = PdfReader(file_path)
+                if reader.is_encrypted:
+                    return redirect(url_for('enter_password', filename=filename))
+                else:
+                    # If the PDF is not encrypted, unlock and redirect to view
+                    output_filename = f"{os.path.splitext(filename)[0]}-unlocked.pdf"
+                    output_path = os.path.join(app.config['UNLOCKED_FOLDER'], output_filename)
+
+                    writer = PdfWriter()
+                    for page in reader.pages:
+                        writer.add_page(page)
+
+                    with open(output_path, 'wb') as output_file:
+                        writer.write(output_file)
+
+                    flash('PDF is not locked and has been opened successfully!', 'success')
+                    return redirect(url_for('view_pdf', filename=output_filename))
+            except Exception as e:
+                flash(f'Error processing PDF: {str(e)}', 'error')
+                return redirect(request.url)
         else:
             flash('Invalid file type. Please upload a PDF file.', 'error')
     return render_template('upload.html')
@@ -38,25 +60,25 @@ def enter_password(filename):
         input_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
         output_filename = f"{os.path.splitext(filename)[0]}-unlocked.pdf"
         output_path = os.path.join(app.config['UNLOCKED_FOLDER'], output_filename)
-        
+
         try:
             reader = PdfReader(input_path)
             if reader.is_encrypted:
                 reader.decrypt(password)
-            
+
             writer = PdfWriter()
             for page in reader.pages:
                 writer.add_page(page)
-            
+
             with open(output_path, 'wb') as output_file:
                 writer.write(output_file)
-            
+
             flash('PDF unlocked successfully!', 'success')
             return redirect(url_for('view_pdf', filename=output_filename))
         except Exception as e:
             flash(f'Error unlocking PDF: {str(e)}', 'error')
             return redirect(url_for('enter_password', filename=filename))
-    
+
     return render_template('enter_password.html', filename=filename)
 
 @app.route('/view/<filename>')
